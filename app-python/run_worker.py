@@ -4,13 +4,13 @@ from temporalio.client import Client
 from temporalio.worker import Worker
 
 from activities import (
-    book_car,
     book_flight,
     book_hotel,
+    book_car,
     notify_user,
-    undo_book_car,
     undo_book_flight,
     undo_book_hotel,
+    undo_book_car,
 )
 from book_workflow import BookWorkflow
 
@@ -20,15 +20,15 @@ async def main():
 
     worker = Worker(
         client,
-        task_queue="saga-task-queue",
+        task_queue="trip-task-queue",
         workflows=[BookWorkflow],
         activities=[
-            book_car,
-            book_hotel,
             book_flight,
-            undo_book_car,
-            undo_book_hotel,
+            book_hotel,
+            book_car,
             undo_book_flight,
+            undo_book_hotel,
+            undo_book_car,
             notify_user,
         ],
     )

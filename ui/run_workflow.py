@@ -8,9 +8,9 @@ from dataclasses import dataclass
 @dataclass
 class BookVacationInput:
     book_user_id: str
-    book_car_id: str
-    book_hotel_id: str
     book_flight_id: str
+    book_hotel_id: str
+    book_car_id: str
 
 app = Flask(__name__)
 
@@ -23,15 +23,15 @@ async def display_form():
 @app.route("/book", methods=["POST"])
 async def book_vacation():
     user_id = f'{request.form.get("name").replace(" ", "-").lower()}-{str(uuid.uuid4().int)[:6]}'
-    car = request.form.get("car")
-    hotel = request.form.get("hotel")
     flight = request.form.get("flight")
+    hotel = request.form.get("hotel")
+    car = request.form.get("car")
 
     input = BookVacationInput(
         book_user_id=user_id,
-        book_car_id=car,
-        book_hotel_id=hotel,
         book_flight_id=flight,
+        book_hotel_id=hotel,
+        book_car_id=car,
     )
 
     client = await Client.connect("localhost:7233")
@@ -40,7 +40,7 @@ async def book_vacation():
         "BookWorkflow",
         input,
         id=user_id,
-        task_queue="saga-task-queue",
+        task_queue="trip-task-queue",
     )
     if result == "Booking cancelled":
         return render_template("book_vacation.html", cancelled=True)
@@ -48,17 +48,18 @@ async def book_vacation():
     else:
         print(result)
         result_list = result.split("Booked ")
-        car = result_list[1].split(": ")[1].title()
+        flight = result_list[1].split(": ")[1].title()
         hotel = result_list[2].split(": ")[1].title()
-        flight = result_list[3].split(": ")[1].title()
+        car = result_list[3].split(": ")[1].title()
+
         print(user_id)
         return render_template(
             "book_vacation.html",
             result=result,
             cancelled=False,
-            car=car,
-            hotel=hotel,
             flight=flight,
+            hotel=hotel,
+            car=car,
             user_id=user_id,
         )
 

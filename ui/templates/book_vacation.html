@@ -116,14 +116,14 @@
         placeholder="Alice Jones"
       /><br />
 
-      <label for="car">Car:</label>
+      <label for="flight">Flight:</label>
       <input
         type="text"
-        name="car"
-        id="car"
-        value="Ford 150"
+        name="flight"
+        id="flight"
+        value="Alaska Airlines 123"
         required
-        placeholder="Ford 150"
+        placeholder="Alaska Airlines 123"
       /><br />
 
       <label for="hotel">Hotel:</label>
@@ -136,14 +136,14 @@
         placeholder="Hilton 123"
       /><br />
 
-      <label for="flight">Flight:</label>
+      <label for="car">Car:</label>
       <input
         type="text"
-        name="flight"
-        id="flight"
-        value="Alaska Airlines 123"
+        name="car"
+        id="car"
+        value="Ford 150"
         required
-        placeholder="Alaska Airlines 123"
+        placeholder="Ford 150"
       /><br />
 
       <input type="submit" value="Book Trip" />
@@ -156,10 +156,10 @@
     {% endif %} {% if result %}
     <div class="result">
       <h2>Booking Result</h2>
-      <p>{{ car }}</p>
-      <p>{{ hotel }}</p>
-      <p>{{ flight }}</p>
-      <p>Confirmation Number: {{ user_id }}</p>
+      <p><b>Flight:</b> {{ flight }}</p>
+      <p><b>Hotel:</b> {{ hotel }}</p>
+      <p><b>Car:</b> {{ car }}</p>
+      <p><b>Confirmation Number:</b> {{ user_id }}</p>
     </div>
     {% endif %}
   </body>

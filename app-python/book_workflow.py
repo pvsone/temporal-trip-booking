@@ -6,7 +6,7 @@ from temporalio import workflow
 from temporalio.common import RetryPolicy
 
 with workflow.unsafe.imports_passed_through():
-    from activities import BookTripInput, book_car, book_flight, book_hotel, notify_user
+    from activities import BookTripInput, book_flight, book_hotel, book_car, notify_user
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,9 +30,9 @@ class BookWorkflow:
         compensations = []
 
         try:
-            # Book Car
-            car = await workflow.execute_activity(book_car, input, **activity_args)
-            compensations.append("undo_book_car")
+            # Book Flight
+            flight = await workflow.execute_activity(book_flight, input, **activity_args)
+            compensations.append("undo_book_flight")
 
             workflow.logger.info("Sleeping for 1 second...")
             await asyncio.sleep(1)
@@ -44,14 +44,14 @@ class BookWorkflow:
             workflow.logger.info("Sleeping for 1 second...")
             await asyncio.sleep(1)
 
-            # Book Flight
-            flight = await workflow.execute_activity(book_flight, input, **activity_args)
-            compensations.append("undo_book_flight")
+            # Book Car
+            car = await workflow.execute_activity(book_car, input, **activity_args)
+            compensations.append("undo_book_car")
 
             # Send Notification
             await workflow.execute_activity(notify_user, input, **activity_args)
 
-            return f"{car} {hotel} {flight}"
+            return f"{flight} {hotel} {car}"
 
         except Exception as ex:
             workflow.logger.error("Failed to book trip", ex)
