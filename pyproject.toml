@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "temporal-sagas"
+version = "0.1.0"
+description = ""
+authors = ["Peter Sullivan <peter.sullivan@temporal.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ruff = "^0.3.5"
+flask = { extras = ["async"], version = "^3.0.3" }
+
+[tool.poetry.group.dev.dependencies]
+temporalio = "^1.5.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+format = [{ cmd = "ruff check --fix ." }]
+lint = [{ cmd = "ruff check ./*.py" }]
+
+[tool.ruff]
+select = ["E", "F"]
+line-length = 120
+fix = true
