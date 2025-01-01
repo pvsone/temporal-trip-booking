@@ -5,15 +5,15 @@ import (
 	"log/slog"
 	"os"
 
-	"temporal-sagas/activities"
-	"temporal-sagas/workflows"
+	"temporal-trip-booking/activities"
+	"temporal-trip-booking/workflows"
 
 	"go.temporal.io/sdk/client"
 	tlog "go.temporal.io/sdk/log"
 	"go.temporal.io/sdk/worker"
 )
 
-const TASK_QUEUE = "saga-task-queue"
+const TASK_QUEUE = "trip-task-queue"
 
 func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
@@ -36,12 +36,13 @@ func main() {
 	w := worker.New(temporalClient, TASK_QUEUE, worker.Options{})
 
 	w.RegisterWorkflow(workflows.BookWorkflow)
-	w.RegisterActivity(activities.BookCar)
-	w.RegisterActivity(activities.BookHotel)
 	w.RegisterActivity(activities.BookFlight)
-	w.RegisterActivity(activities.UndoBookCar)
-	w.RegisterActivity(activities.UndoBookHotel)
+	w.RegisterActivity(activities.BookHotel)
+	w.RegisterActivity(activities.BookCar)
+	w.RegisterActivity(activities.NotifyUser)
 	w.RegisterActivity(activities.UndoBookFlight)
+	w.RegisterActivity(activities.UndoBookHotel)
+	w.RegisterActivity(activities.UndoBookCar)
 
 	err = w.Run(worker.InterruptCh())
 	if err != nil {
