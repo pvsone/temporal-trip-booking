@@ -26,7 +26,7 @@ class BookWorkflow:
             ),
         }
 
-        # saga compensations
+        # Saga compensations
         compensations = []
 
         try:

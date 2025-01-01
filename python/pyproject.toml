@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "temporal-trip-booking-app"
+version = "0.1.0"
+description = "A Temporal workflow for booking a trip, with compensating actions"
+authors = ["Peter Sullivan <peter.sullivan@temporal.io>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+temporalio = "^1.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

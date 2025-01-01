@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "temporal-trip-booking"
+name = "temporal-trip-booking-ui"
 version = "0.1.0"
 description = "A Temporal workflow for booking a trip, with compensating actions"
 authors = ["Peter Sullivan <peter.sullivan@temporal.io>"]

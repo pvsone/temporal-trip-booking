@@ -32,6 +32,8 @@ async def main():
             notify_user,
         ],
     )
+
+    print("Python trip booking worker starting...")
     await worker.run()
 
 

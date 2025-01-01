@@ -38,7 +38,7 @@ async def book_hotel(input: BookTripInput) -> str:
 
     if "buggy" in input.book_hotel_id.lower():
         # a simulated bug
-        error = False
+        error = True
         if error:
             raise Exception("Error due to bug in code")
 

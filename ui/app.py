@@ -1,8 +1,6 @@
-import uuid
-
 from flask import Flask, render_template, request
+import uuid
 from temporalio.client import Client
-
 from dataclasses import dataclass
 
 @dataclass
