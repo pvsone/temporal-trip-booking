@@ -8,87 +8,87 @@ from dataclasses import dataclass
 
 @dataclass
 class BookTripInput:
-    book_user_id: str
-    book_flight_id: str
-    book_hotel_id: str
-    book_car_id: str
+    userId: str
+    flightId: str
+    hotelId: str
+    carId: str
 
 logging.basicConfig(level=logging.INFO)
 
 
 @activity.defn
 async def book_flight(input: BookTripInput) -> str:
-    activity.logger.info(f"Booking flight: {input.book_flight_id}")
+    activity.logger.info(f"Booking flight: {input.flightId}")
 
     await asyncio.sleep(1)
 
-    if "flaky" in input.book_flight_id.lower():
+    if "flaky" in input.flightId.lower():
         # a transient error, which will be retried
         if activity.info().attempt < 6:
             raise ApplicationError("Flight booking service is currently unavailable")
 
-    return f"Booked flight: {input.book_flight_id}"
+    return f"Booked flight: {input.flightId}"
 
 
 @activity.defn
 async def book_hotel(input: BookTripInput) -> str:
-    activity.logger.info(f"Booking hotel: {input.book_hotel_id}")
+    activity.logger.info(f"Booking hotel: {input.hotelId}")
 
     await asyncio.sleep(1)
 
-    if "buggy" in input.book_hotel_id.lower():
+    if "buggy" in input.hotelId.lower():
         # a simulated bug
         error = True
         if error:
             raise Exception("Error due to bug in code")
 
-    return f"Booked hotel: {input.book_hotel_id}"
+    return f"Booked hotel: {input.hotelId}"
 
 
 @activity.defn
 async def book_car(input: BookTripInput) -> str:
-    activity.logger.info(f"Booking car {input.book_car_id}")
+    activity.logger.info(f"Booking car {input.carId}")
 
     await asyncio.sleep(1)
-        
-    if "invalid" in input.book_car_id.lower():
-        # a business error, which cannot be retried
-        raise ApplicationError(f"Car {input.book_car_id} is invalid", type="InvalidCar", non_retryable=True)
 
-    return f"Booked car: {input.book_car_id}"
+    if "invalid" in input.carId.lower():
+        # a business error, which cannot be retried
+        raise ApplicationError(f"Car {input.carId} is invalid", type="InvalidCar", non_retryable=True)
+
+    return f"Booked car: {input.carId}"
 
 
 @activity.defn
 async def notify_user(input: BookTripInput) -> str:
-    activity.logger.info(f"Notifying user: {input.book_user_id}")
+    activity.logger.info(f"Notifying user: {input.userId}")
 
     await asyncio.sleep(1)
 
-    return f"Notified user: {input.book_user_id}"
+    return f"Notified user: {input.userId}"
 
 
 @activity.defn
 async def undo_book_flight(input: BookTripInput) -> str:
-    activity.logger.info(f"Undo flight booking: {input.book_flight_id}")
+    activity.logger.info(f"Undo flight booking: {input.flightId}")
 
     await asyncio.sleep(1)
 
-    return f"Unbooked flight: {input.book_flight_id}"
+    return f"Unbooked flight: {input.flightId}"
 
 
 @activity.defn
 async def undo_book_hotel(input: BookTripInput) -> str:
-    activity.logger.info(f"Undo hotel booking: {input.book_hotel_id}")
+    activity.logger.info(f"Undo hotel booking: {input.hotelId}")
 
     await asyncio.sleep(1)
 
-    return f"Unbooked hotel: {input.book_hotel_id}"
+    return f"Unbooked hotel: {input.hotelId}"
 
 
 @activity.defn
 async def undo_book_car(input: BookTripInput) -> str:
-    activity.logger.info(f"Undo car booking: {input.book_car_id}")
+    activity.logger.info(f"Undo car booking: {input.carId}")
 
     await asyncio.sleep(1)
 
-    return f"Unbooked car: {input.book_car_id}"
+    return f"Unbooked car: {input.carId}"

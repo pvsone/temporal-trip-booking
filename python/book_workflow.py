@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 class BookWorkflow:
     @workflow.run
     async def run(self, input: BookTripInput):
-        workflow.logger.info(f"Book workflow started, user_id = {input.book_user_id}")
+        workflow.logger.info(f"Book workflow started, user_id = {input.userId}")
 
         activity_args = {
             "start_to_close_timeout": timedelta(seconds=5),

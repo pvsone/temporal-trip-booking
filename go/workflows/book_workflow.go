@@ -11,15 +11,15 @@ import (
 )
 
 type BookTripInput struct {
-	BookUserId   string `json:"book_user_id"`
-	BookCarId    string `json:"book_car_id"`
-	BookHotelId  string `json:"book_hotel_id"`
-	BookFlightId string `json:"book_flight_id"`
+	UserId   string `json:"userId"`
+	FlightId string `json:"flightId"`
+	HotelId  string `json:"hotelId"`
+	CarId    string `json:"carId"`
 }
 
 func BookWorkflow(ctx workflow.Context, input BookTripInput) (output string, err error) {
 	logger := workflow.GetLogger(ctx)
-	logger.Info("Book workflow started", "userId", input.BookUserId)
+	logger.Info("Book workflow started", "userId", input.UserId)
 
 	activityOptions := workflow.ActivityOptions{
 		StartToCloseTimeout: 5 * time.Second,
@@ -43,12 +43,12 @@ func BookWorkflow(ctx workflow.Context, input BookTripInput) (output string, err
 
 	// Book Flight
 	var flight string
-	err = workflow.ExecuteActivity(ctx, activities.BookFlight, input.BookFlightId).Get(ctx, &flight)
+	err = workflow.ExecuteActivity(ctx, activities.BookFlight, input.FlightId).Get(ctx, &flight)
 	if err != nil {
 		logger.Warn("Flight booking failed", "error", err)
 		return "Booking cancelled", err
 	}
-	saga.AddCompensation(activities.UndoBookFlight, input.BookFlightId)
+	saga.AddCompensation(activities.UndoBookFlight, input.FlightId)
 
 	// Simulate delay
 	logger.Info("Sleeping for 1 second...")
@@ -56,12 +56,12 @@ func BookWorkflow(ctx workflow.Context, input BookTripInput) (output string, err
 
 	// Book Hotel
 	var hotel string
-	err = workflow.ExecuteActivity(ctx, activities.BookHotel, input.BookHotelId).Get(ctx, &hotel)
+	err = workflow.ExecuteActivity(ctx, activities.BookHotel, input.HotelId).Get(ctx, &hotel)
 	if err != nil {
 		logger.Warn("Hotel booking failed", "error", err)
 		return "Booking cancelled", err
 	}
-	saga.AddCompensation(activities.UndoBookHotel, input.BookHotelId)
+	saga.AddCompensation(activities.UndoBookHotel, input.HotelId)
 
 	// Simulate delay
 	logger.Info("Sleeping for 1 second...")
@@ -69,16 +69,16 @@ func BookWorkflow(ctx workflow.Context, input BookTripInput) (output string, err
 
 	// Book Car
 	var car string
-	err = workflow.ExecuteActivity(ctx, activities.BookCar, input.BookCarId).Get(ctx, &car)
+	err = workflow.ExecuteActivity(ctx, activities.BookCar, input.CarId).Get(ctx, &car)
 	if err != nil {
 		logger.Warn("Car booking failed", "error", err)
 		return "Booking cancelled", err
 	}
-	saga.AddCompensation(activities.UndoBookCar, input.BookCarId)
+	saga.AddCompensation(activities.UndoBookCar, input.CarId)
 
 	// Send Notification
 	var notification string
-	err = workflow.ExecuteActivity(ctx, activities.NotifyUser, input.BookUserId).Get(ctx, &notification)
+	err = workflow.ExecuteActivity(ctx, activities.NotifyUser, input.UserId).Get(ctx, &notification)
 
 	output = fmt.Sprintf("%s %s %s", flight, hotel, car)
 	return output, nil

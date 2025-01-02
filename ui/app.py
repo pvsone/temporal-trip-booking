@@ -3,33 +3,36 @@ import uuid
 from temporalio.client import Client
 from dataclasses import dataclass
 
+
 @dataclass
-class BookVacationInput:
-    book_user_id: str
-    book_flight_id: str
-    book_hotel_id: str
-    book_car_id: str
+class BookTripInput:
+    userId: str
+    flightId: str
+    hotelId: str
+    carId: str
+
 
 app = Flask(__name__)
 
 
 @app.route("/")
 async def display_form():
-    return render_template("book_vacation.html")
+    return render_template("book_trip.html")
 
 
 @app.route("/book", methods=["POST"])
-async def book_vacation():
-    user_id = f'{request.form.get("name").replace(" ", "-").lower()}-{str(uuid.uuid4().int)[:6]}'
+async def book_trip():
+    user_id = f'{request.form.get("name").replace(
+        " ", "-").lower()}-{str(uuid.uuid4().int)[:6]}'
     flight = request.form.get("flight")
     hotel = request.form.get("hotel")
     car = request.form.get("car")
 
-    input = BookVacationInput(
-        book_user_id=user_id,
-        book_flight_id=flight,
-        book_hotel_id=hotel,
-        book_car_id=car,
+    input = BookTripInput(
+        userId=user_id,
+        flightId=flight,
+        hotelId=hotel,
+        carId=car,
     )
 
     client = await Client.connect("localhost:7233")
@@ -41,7 +44,7 @@ async def book_vacation():
         task_queue="trip-task-queue",
     )
     if result == "Booking cancelled":
-        return render_template("book_vacation.html", cancelled=True)
+        return render_template("book_trip.html", cancelled=True)
 
     else:
         print(result)
@@ -52,7 +55,7 @@ async def book_vacation():
 
         print(user_id)
         return render_template(
-            "book_vacation.html",
+            "book_trip.html",
             result=result,
             cancelled=False,
             flight=flight,
