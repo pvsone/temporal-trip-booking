@@ -1,139 +1,256 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <title>Temporal Trip Booking</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Book your trip with flight, hotel, and car" />
         <style>
+            :root {
+                --primary-color: #6366F1;
+                --primary-hover: rgb(68, 76, 231);
+                --text-dark: #222222;
+                --text-medium: #444444;
+                --border-light: #dddddd;
+                --success-bg: #e6ffe6;
+                --success-border: #99ff99;
+                --error-bg: #ffe6e6;
+                --error-border: #ff9999;
+                --spacing-sm: 10px;
+                --spacing-md: 20px;
+                --spacing-lg: 30px;
+            }
+
             body {
                 font-family: Arial, Helvetica, sans-serif;
-                background-color: #f7f7f7;
+                background-color: #fdfdfd;
+                margin: 0;
+                padding: var(--spacing-md);
+            }
+
+            /* Typography */
+            h1, h2, p {
+                text-align: center;
             }
 
             h1 {
-                color: #222222;
-                text-align: center;
-                margin-top: 30px;
+                color: var(--primary-color);
+                margin-top: var(--spacing-lg);
             }
+
             h2 {
-                color: #222222;
-                text-align: center;
-                margin-top: 30px;
+                color: var(--text-dark);
+                margin-top: var(--spacing-md);
+                font-size: 24px;
+                font-weight: bold;
             }
+
             p {
-                color: #444444;
-                text-align: center;
-                margin-bottom: 10px;
+                font-size: 18px;
+                color: var(--text-medium);
+                margin-bottom: var(--spacing-sm);
             }
-            form {
+
+            /* Layout */
+            main {
+                max-width: 800px;
                 margin: 0 auto;
-                width: 50%;
+            }
+
+            /* Form Styles */
+            form {
                 background-color: #ffffff;
-                padding: 20px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+                padding: var(--spacing-md);
+                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+                border-radius: 8px;
+            }
+
+            .form-group {
+                margin-bottom: var(--spacing-md);
             }
 
             label {
                 font-size: 18px;
                 font-weight: bold;
                 display: block;
-                margin-bottom: 10px;
-                color: #222222;
+                margin-bottom: var(--spacing-sm);
+                color: var(--text-dark);
             }
 
             input[type="text"] {
                 font-size: 16px;
-                padding-top: 10px;
-                padding-left: 10px;
-                padding-bottom: 10px;
-                border: 2px solid #dddddd;
+                padding: var(--spacing-sm);
+                border: 2px solid var(--border-light);
                 border-radius: 4px;
-                width: 98%;
-                margin-bottom: 20px;
+                width: 100%;
+                box-sizing: border-box;
+                transition: border-color 0.3s ease;
             }
 
-            input[type="submit"] {
+            input[type="text"]:focus {
+                outline: none;
+                border-color: var(--primary-color);
+            }
+
+            button[type="submit"] {
                 font-size: 18px;
                 font-weight: bold;
-                background-color: #222222;
+                background-color: var(--primary-color);
                 color: #ffffff;
                 border: none;
                 border-radius: 4px;
-                padding: 10px;
+                padding: var(--spacing-sm) var(--spacing-md);
                 width: 50%;
                 display: block;
-                margin: 0 auto;
+                margin: var(--spacing-md) auto 0;
                 cursor: pointer;
                 transition: background-color 0.3s ease;
             }
 
-            input[type="submit"]:hover {
-                background-color: #444444;
+            button[type="submit"]:hover {
+                background-color: var(--primary-hover);
             }
 
-            h2 {
-                font-size: 24px;
-                font-weight: bold;
-                color: #222222;
-                margin-top: 30px;
-            }
-
-            p {
-                font-size: 18px;
-                color: #444444;
-                margin-bottom: 10px;
+            /* Status Messages */
+            .cancelled, .booking-result {
+                margin-top: var(--spacing-md);
+                border: 2px solid;
+                border-radius: 8px;
+                padding: var(--spacing-md);
             }
 
             .cancelled {
-                background-color: #ffe6e6;
-                border: 2px solid #ff9999;
-                margin-top: 20px;
+                background-color: var(--error-bg);
+                border-color: var(--error-border);
             }
 
             .booking-result {
-                background-color: #e6ffe6;
-                border: 2px solid #99ff99;
-                margin-top: 20px;
+                background-color: var(--success-bg);
+                border-color: var(--success-border);
+            }
+
+            /* Result List Styles */
+            .result-list {
+                margin: var(--spacing-md) 0;
+            }
+
+            .result-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: var(--spacing-sm);
+                padding: var(--spacing-sm) 0;
+            }
+
+            .result-label {
+                font-weight: bold;
+                color: var(--text-dark);
+                min-width: 180px;
+            }
+
+            .result-value {
+                color: var(--text-medium);
+            }
+
+            /* Remove old definition list styles */
+            dl, dt, dd {
+                display: none;
             }
         </style>
     </head>
     <body>
-        <h1>Temporal Trip Booking</h1>
-        <form method="post" action="/book">
-            <label for="name">Name:</label>
-            <input type="text" name="name" id="name" value="Alice Jones" required placeholder="Alice Jones" /><br />
+        <header>
+            <h1>Temporal Trip Booking</h1>
+        </header>
 
-            <label for="flight">Flight:</label>
-            <input
-                type="text"
-                name="flight"
-                id="flight"
-                value="Alaska Airlines 123"
-                required
-                placeholder="Alaska Airlines 123"
-            /><br />
+        <main>
+            <form method="post" action="/book" aria-label="Trip booking form">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        id="name" 
+                        value="Alice Jones" 
+                        required 
+                        placeholder="Enter name"
+                        aria-required="true"
+                    />
+                </div>
 
-            <label for="hotel">Hotel:</label>
-            <input type="text" name="hotel" id="hotel" value="Hilton 123" required placeholder="Hilton 123" /><br />
+                <div class="form-group">
+                    <label for="flight">Flight:</label>
+                    <input
+                        type="text"
+                        name="flight"
+                        id="flight"
+                        value="Alaska Airlines 123"
+                        required
+                        placeholder="Enter flight"
+                        aria-required="true"
+                    />
+                </div>
 
-            <label for="car">Car:</label>
-            <input type="text" name="car" id="car" value="Ford 150" required placeholder="Ford 150" /><br />
+                <div class="form-group">
+                    <label for="hotel">Hotel:</label>
+                    <input 
+                        type="text" 
+                        name="hotel" 
+                        id="hotel" 
+                        value="Hilton 123" 
+                        required 
+                        placeholder="Enter hotel"
+                        aria-required="true"
+                    />
+                </div>
 
-            <input type="submit" value="Book Trip" />
-        </form>
+                <div class="form-group">
+                    <label for="car">Car:</label>
+                    <input 
+                        type="text" 
+                        name="car" 
+                        id="car" 
+                        value="Ford 150" 
+                        required 
+                        placeholder="Enter car"
+                        aria-required="true"
+                    />
+                </div>
 
-        {% if cancelled %}
-        <div class="cancelled">
-            <h2>Booking Cancelled</h2>
-        </div>
-        {% endif %} {% if result %}
-        <div class="booking-result">
-            <h2>Booking Result</h2>
-            <p><b>Flight:</b> {{ flight }}</p>
-            <p><b>Hotel:</b> {{ hotel }}</p>
-            <p><b>Car:</b> {{ car }}</p>
-            <p><b>Confirmation Number:</b> {{ user_id }}</p>
-        </div>
-        {% endif %}
+                <button type="submit">Book Trip</button>
+            </form>
+
+            {% if cancelled %}
+            <section class="cancelled" role="alert" aria-live="polite">
+                <h2>Booking Cancelled</h2>
+            </section>
+            {% endif %}
+
+            {% if result %}
+            <section class="booking-result" role="status" aria-live="polite">
+                <h2>Booking Result</h2>
+                <div class="result-list">
+                    <div class="result-item">
+                        <span class="result-label">Flight:</span>
+                        <span class="result-value">{{ flight }}</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Hotel:</span>
+                        <span class="result-value">{{ hotel }}</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Car:</span>
+                        <span class="result-value">{{ car }}</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Confirmation Number:</span>
+                        <span class="result-value">{{ user_id }}</span>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+        </main>
     </body>
 </html>
