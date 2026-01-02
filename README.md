@@ -40,10 +40,13 @@ cd ui
 ```
 
 ### Run the worker
-```bash
-cd python
-./start_worker.sh
-```
+Choose one language runtime:
+
+- Python: `cd python && ./start_worker.sh`
+- TypeScript: `cd typescript && ./start_worker.sh`
+- Go: `cd go && ./start_worker.sh`
+- Java: `cd java && ./start_worker.sh`
+- .NET: `cd dotnet && ./start_worker.sh`
 
 ## Demo
 
