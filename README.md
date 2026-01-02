@@ -14,12 +14,13 @@ Install the language tools using [asdf](https://asdf-vm.com/guide/getting-starte
 
 ```bash
 # Add the plugins
-asdf plugin-add python
-asdf plugin-add poetry
-asdf plugin-add golang
-asdf plugin-add java
-asdf plugin-add gradle
-asdf plugin-add nodejs
+asdf plugin add dotnet
+asdf plugin add golang
+asdf plugin add java
+asdf plugin add nodejs
+asdf plugin add python
+asdf plugin add ruby
+asdf plugin add uv
 
 # Install the tools in the .tool-versions file
 asdf install
