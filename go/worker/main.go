@@ -4,9 +4,7 @@ import (
 	"log"
 	"log/slog"
 	"os"
-
-	"temporal-trip-booking/activities"
-	"temporal-trip-booking/workflows"
+	"temporal-trip-booking/app"
 
 	"go.temporal.io/sdk/client"
 	tlog "go.temporal.io/sdk/log"
@@ -35,14 +33,14 @@ func main() {
 
 	w := worker.New(temporalClient, TASK_QUEUE, worker.Options{})
 
-	w.RegisterWorkflow(workflows.BookWorkflow)
-	w.RegisterActivity(activities.BookFlight)
-	w.RegisterActivity(activities.BookHotel)
-	w.RegisterActivity(activities.BookCar)
-	w.RegisterActivity(activities.NotifyUser)
-	w.RegisterActivity(activities.UndoBookFlight)
-	w.RegisterActivity(activities.UndoBookHotel)
-	w.RegisterActivity(activities.UndoBookCar)
+	w.RegisterWorkflow(app.BookWorkflow)
+	w.RegisterActivity(app.BookFlight)
+	w.RegisterActivity(app.BookHotel)
+	w.RegisterActivity(app.BookCar)
+	w.RegisterActivity(app.NotifyUser)
+	w.RegisterActivity(app.UndoBookFlight)
+	w.RegisterActivity(app.UndoBookHotel)
+	w.RegisterActivity(app.UndoBookCar)
 
 	err = w.Run(worker.InterruptCh())
 	if err != nil {

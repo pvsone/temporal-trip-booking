@@ -16,7 +16,7 @@ func (s Saga) Compensate(ctx workflow.Context) {
 	logger := workflow.GetLogger(ctx)
 	logger.Info("Saga compensations started")
 
-	// Compensate in the reverse order that activies were applied.
+	// Compensate in the reverse order that activities were applied.
 	for i := len(s.compensations) - 1; i >= 0; i-- {
 		err := workflow.ExecuteActivity(ctx, s.compensations[i], s.arguments[i]...).Get(ctx, nil)
 		if err != nil {
