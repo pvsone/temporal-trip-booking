@@ -1,5 +1,5 @@
 import { ApplicationFailure, Context, log, sleep } from '@temporalio/activity';
-import type { BookTripInput } from './types';
+import type { BookTripInput } from './shared';
 
 export async function bookFlight(input: BookTripInput): Promise<string> {
   log.info(`Booking flight: ${input.flightId}`);

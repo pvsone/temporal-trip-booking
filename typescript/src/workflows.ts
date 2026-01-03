@@ -1,6 +1,6 @@
 import { proxyActivities, ActivityFailure, ApplicationFailure, sleep, log } from '@temporalio/workflow';
 import type * as activities from './activities';
-import type { BookTripInput } from './types';
+import type { BookTripInput } from './shared';
 
 const { bookFlight, bookHotel, bookCar, notifyUser, undoBookFlight, undoBookHotel, undoBookCar } = proxyActivities<
   typeof activities
