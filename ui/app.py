@@ -1,18 +1,16 @@
 from quart import Quart, render_template, request
 import uuid
-from temporalio.client import Client
-from dataclasses import dataclass
-
-
-@dataclass
-class BookTripInput:
-    userId: str
-    flightId: str
-    hotelId: str
-    carId: str
-
+from client import get_client
+from data import BookTripInput
 
 app = Quart(__name__)
+
+client = None
+
+@app.before_serving
+async def startup():
+    global client
+    client = await get_client()
 
 
 @app.route("/")
@@ -35,8 +33,6 @@ async def book_trip():
         hotelId=hotel,
         carId=car,
     )
-
-    client = await Client.connect("localhost:7233")
 
     result = await client.execute_workflow(
         "BookWorkflow",
