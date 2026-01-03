@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from quart import Quart, render_template, request
 import uuid
 from temporalio.client import Client
 from dataclasses import dataclass
@@ -12,21 +12,22 @@ class BookTripInput:
     carId: str
 
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 
 @app.route("/")
 async def display_form():
-    return render_template("book_trip.html")
+    return await render_template("book_trip.html")
 
 
 @app.route("/book", methods=["POST"])
 async def book_trip():
-    user_id = f'{request.form.get("name").replace(
+    form = await request.form
+    user_id = f'{form.get("name").replace(
         " ", "-").lower()}-{str(uuid.uuid4().int)[:6]}'
-    flight = request.form.get("flight")
-    hotel = request.form.get("hotel")
-    car = request.form.get("car")
+    flight = form.get("flight")
+    hotel = form.get("hotel")
+    car = form.get("car")
 
     input = BookTripInput(
         userId=user_id,
@@ -44,7 +45,7 @@ async def book_trip():
         task_queue="trip-task-queue",
     )
     if result == "Booking cancelled":
-        return render_template("book_trip.html", cancelled=True)
+        return await render_template("book_trip.html", cancelled=True)
 
     else:
         print(result)
@@ -54,7 +55,7 @@ async def book_trip():
         car = result_list[3].split(": ")[1].title()
 
         print(user_id)
-        return render_template(
+        return await render_template(
             "book_trip.html",
             result=result,
             cancelled=False,
