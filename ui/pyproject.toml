@@ -1,15 +1,12 @@
-[tool.poetry]
+[project]
 name = "temporal-trip-booking-ui"
 version = "0.1.0"
 description = "A Temporal workflow for booking a trip, with compensating actions"
-authors = ["Peter Sullivan <peter.sullivan@temporal.io>"]
-readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.12"
-temporalio = "^1.9.0"
-flask = { extras = ["async"], version = "^3.1.0" }
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+authors = [
+    { name = "Peter Sullivan", email = "peter.sullivan@temporal.io" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "temporalio>=1.21.1",
+    "flask[async]>=3.1.0",
+]
