@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Booking Result - Temporal Trip Booking</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Your trip booking result" />
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl">
+            <header class="mb-8">
+                <h1 class="text-4xl font-bold text-center text-indigo-600 mb-2">Temporal Trip Booking</h1>
+            </header>
+
+            <main>
+                {% if cancelled %}
+                <div class="bg-red-50 border-2 border-red-300 rounded-lg p-8 shadow-lg">
+                    <div class="flex items-center justify-center mb-4">
+                        <svg class="w-16 h-16 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-center text-red-700 mb-2">Booking Cancelled</h2>
+                    <p class="text-center text-red-600">Your trip booking could not be completed.</p>
+                    <div class="mt-6 text-center">
+                        <a href="/" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-150 ease-in-out">
+                            Try Again
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if result and not cancelled %}
+                <div class="bg-green-50 border-2 border-green-300 rounded-lg p-8 shadow-lg">
+                    <div class="flex items-center justify-center mb-4">
+                        <svg class="w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-center text-green-700 mb-6">Booking Confirmed!</h2>
+
+                    <div class="bg-white rounded-lg p-6 space-y-4">
+                        <div class="border-b border-gray-200 pb-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-gray-600 uppercase">Flight</span>
+                                <span class="text-lg font-medium text-gray-900">{{ flight }}</span>
+                            </div>
+                        </div>
+
+                        <div class="border-b border-gray-200 pb-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-gray-600 uppercase">Hotel</span>
+                                <span class="text-lg font-medium text-gray-900">{{ hotel }}</span>
+                            </div>
+                        </div>
+
+                        <div class="border-b border-gray-200 pb-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-gray-600 uppercase">Car</span>
+                                <span class="text-lg font-medium text-gray-900">{{ car }}</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-gray-600 uppercase">Confirmation Number</span>
+                                <span class="text-lg font-bold text-indigo-600">{{ user_id }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <a href="/" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-150 ease-in-out">
+                            Book Another Trip
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </main>
+        </div>
+    </body>
+</html>

@@ -15,7 +15,7 @@ async def startup():
 
 @app.route("/")
 async def display_form():
-    return await render_template("book_trip.html")
+    return await render_template("index.html")
 
 
 @app.route("/book", methods=["POST"])
@@ -41,7 +41,7 @@ async def book_trip():
         task_queue="trip-task-queue",
     )
     if result == "Booking cancelled":
-        return await render_template("book_trip.html", cancelled=True)
+        return await render_template("book_result.html", cancelled=True)
 
     else:
         print(result)
@@ -52,7 +52,7 @@ async def book_trip():
 
         print(user_id)
         return await render_template(
-            "book_trip.html",
+            "book_result.html",
             result=result,
             cancelled=False,
             flight=flight,
