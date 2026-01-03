@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Temporalio.Common;
 using Temporalio.Workflows;
-using TemporalTripBooking.Model;
 
 namespace TemporalTripBooking;
 
@@ -9,43 +8,49 @@ namespace TemporalTripBooking;
 public class BookWorkflow
 {
     [WorkflowRun]
-    public async Task<string> Execute(BookTripInput input)
+    public async Task<string> Execute(Shared input)
     {
         Workflow.Logger.LogInformation("Book workflow started, user_id = {}", input.UserId);
-
+        var options = new ActivityOptions() { 
+            StartToCloseTimeout = TimeSpan.FromSeconds(5),
+            RetryPolicy = new() {
+                InitialInterval = TimeSpan.FromSeconds(1),
+                MaximumInterval = TimeSpan.FromSeconds(30),
+                BackoffCoefficient = 2
+            }
+        };
+        
         var compensations = new Stack<Func<Task>>();
 
         try
         {
+            // Book Flight
+            var flight = await Workflow.ExecuteActivityAsync(() =>
+                TripActivities.BookFlight(input), options);
             compensations.Push(async () => 
-                await Workflow.ExecuteActivityAsync((TripActivities act) =>
-                    act.UndoBookFlight(input), TripActivities.ActivityOpts));
-
-            var flight = await Workflow.ExecuteActivityAsync((TripActivities act) =>
-                act.BookFlight(input), TripActivities.ActivityOpts);
-
+                await Workflow.ExecuteActivityAsync(() => TripActivities.UndoBookFlight(input), options));
+            
             Workflow.Logger.LogInformation("Sleeping for 1 second...");
             await Workflow.DelayAsync(TimeSpan.FromSeconds(1));
 
+            // Book Hotel
+            var hotel = await Workflow.ExecuteActivityAsync(() =>
+                TripActivities.BookHotel(input), options);
             compensations.Push(async () => 
-                await Workflow.ExecuteActivityAsync((TripActivities act) =>
-                    act.UndoBookHotel(input), TripActivities.ActivityOpts));
-
-            var hotel = await Workflow.ExecuteActivityAsync((TripActivities act) =>
-                act.BookHotel(input), TripActivities.ActivityOpts);
-
+                await Workflow.ExecuteActivityAsync(() => TripActivities.UndoBookHotel(input), options));
+            
             Workflow.Logger.LogInformation("Sleeping for 1 second...");
             await Workflow.DelayAsync(TimeSpan.FromSeconds(1));
 
+            // Book Car
+            var car = await Workflow.ExecuteActivityAsync(() =>
+                TripActivities.BookCar(input), options);
             compensations.Push(async () => 
-                await Workflow.ExecuteActivityAsync((TripActivities act) =>
-                    act.UndoBookCar(input), TripActivities.ActivityOpts));
+                await Workflow.ExecuteActivityAsync(() => TripActivities.UndoBookCar(input), options));
 
-            var car = await Workflow.ExecuteActivityAsync((TripActivities act) =>
-                act.BookCar(input), TripActivities.ActivityOpts);
-
-            await Workflow.ExecuteActivityAsync((TripActivities act) =>
-                act.NotifyUser(input), TripActivities.ActivityOpts);
+            // Notify User
+            await Workflow.ExecuteActivityAsync(() =>
+                TripActivities.NotifyUser(input), options);
 
             return $"{flight} {hotel} {car}";
         }

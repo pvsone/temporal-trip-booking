@@ -24,9 +24,9 @@ var activities = new TripActivities();
 
 using var worker = new TemporalWorker(
     client,
-    new TemporalWorkerOptions("trip-task-queue").
-		AddAllActivities(activities).
-		AddWorkflow<BookWorkflow>()
+    new TemporalWorkerOptions("trip-task-queue")
+        .AddAllActivities(activities)
+        .AddWorkflow<BookWorkflow>()
 );
 
 // Run worker until cancelled

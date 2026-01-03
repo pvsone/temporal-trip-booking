@@ -1,27 +1,14 @@
 using Microsoft.Extensions.Logging;
 using Temporalio.Activities;
 using Temporalio.Exceptions;
-using TemporalTripBooking.Model;
 using Temporalio.Workflows;
 
 namespace TemporalTripBooking;
 
-public class TripActivities
+public class TripActivities 
 {
-    public static readonly ActivityOptions ActivityOpts = new()
-    {
-        StartToCloseTimeout = TimeSpan.FromSeconds(5),
-        RetryPolicy = new()
-        {
-            InitialInterval = TimeSpan.FromSeconds(1),
-            MaximumInterval = TimeSpan.FromSeconds(30),
-            BackoffCoefficient = 2
-        }
-    };
-
-
     [Activity]
-    public async Task<string> BookFlight(BookTripInput input)
+    public static async Task<string> BookFlight(Shared input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Booking flight: {FlightId}", input.FlightId);
@@ -38,7 +25,7 @@ public class TripActivities
     }
 
     [Activity]
-    public async Task<string> BookHotel(BookTripInput input)
+    public static async Task<string> BookHotel(Shared input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Booking hotel: {HotelId}", input.HotelId);
@@ -58,7 +45,7 @@ public class TripActivities
     }
 
     [Activity]
-    public async Task<string> BookCar(BookTripInput input)
+    public static async Task<string> BookCar(Shared input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Booking car: {CarId}", input.CarId);
@@ -75,7 +62,7 @@ public class TripActivities
     }
 
     [Activity]
-    public async Task<string> NotifyUser(BookTripInput input)
+    public static async Task<string> NotifyUser(Shared input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Notifying user: {UserId}", input.UserId);
@@ -86,7 +73,7 @@ public class TripActivities
     }
 
     [Activity]
-    public async Task<string> UndoBookFlight(BookTripInput input)
+    public static async Task<string> UndoBookFlight(Shared input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Undo flight booking: {FlightId}", input.FlightId);
@@ -97,7 +84,7 @@ public class TripActivities
     }
 
     [Activity]
-    public async Task<string> UndoBookHotel(BookTripInput input)
+    public static async Task<string> UndoBookHotel(Shared input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Undo hotel booking: {HotelId}", input.HotelId);
@@ -108,7 +95,7 @@ public class TripActivities
     }
 
     [Activity]
-    public async Task<string> UndoBookCar(BookTripInput input)
+    public static async Task<string> UndoBookCar(Shared input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Undo car booking: {CarId}", input.CarId);
