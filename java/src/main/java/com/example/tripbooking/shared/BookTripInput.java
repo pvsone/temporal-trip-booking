@@ -1,4 +1,4 @@
-package com.example.tripbooking.model;
+package com.example.tripbooking.shared;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookTripInput {
-
     private String userId;
     private String flightId;
     private String hotelId;

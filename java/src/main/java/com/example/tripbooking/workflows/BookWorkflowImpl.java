@@ -1,7 +1,8 @@
 package com.example.tripbooking.workflows;
 
 import com.example.tripbooking.activities.TripActivities;
-import com.example.tripbooking.model.BookTripInput;
+import com.example.tripbooking.shared.BookTripInput;
+
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
