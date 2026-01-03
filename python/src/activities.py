@@ -4,14 +4,7 @@ import logging
 from temporalio import activity
 from temporalio.exceptions import ApplicationError
 
-from dataclasses import dataclass
-
-@dataclass
-class BookTripInput:
-    userId: str
-    flightId: str
-    hotelId: str
-    carId: str
+from shared import BookTripInput
 
 logging.basicConfig(level=logging.INFO)
 

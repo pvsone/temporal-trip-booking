@@ -12,7 +12,7 @@ from activities import (
     undo_book_hotel,
     undo_book_car,
 )
-from book_workflow import BookWorkflow
+from workflow import BookWorkflow
 
 
 async def main():

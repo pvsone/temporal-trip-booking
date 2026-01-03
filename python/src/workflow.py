@@ -6,7 +6,8 @@ from temporalio import workflow
 from temporalio.common import RetryPolicy
 
 with workflow.unsafe.imports_passed_through():
-    from activities import BookTripInput, book_flight, book_hotel, book_car, notify_user
+    from shared import BookTripInput
+    from activities import book_flight, book_hotel, book_car, notify_user, undo_book_flight, undo_book_hotel, undo_book_car
 
 logging.basicConfig(level=logging.INFO)
 

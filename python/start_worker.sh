@@ -1,3 +1,3 @@
 #!/bin/bash
 uv sync
-uv run python worker.py
+uv run python src/worker.py
