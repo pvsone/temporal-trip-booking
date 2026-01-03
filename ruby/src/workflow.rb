@@ -17,37 +17,37 @@ module TripBooking
       compensations = []
 
       # Book flight
-      compensations << Activities::UndoBookFlight
       flight = Temporalio::Workflow.execute_activity(
         Activities::BookFlight,
         input,
         start_to_close_timeout: 5,
         retry_policy: retry_policy
       )
+      compensations << Activities::UndoBookFlight
 
       Temporalio::Workflow.logger.info("Sleeping for 1 second...")
       Temporalio::Workflow.sleep(1)
 
       # Book hotel
-      compensations << Activities::UndoBookHotel
       hotel = Temporalio::Workflow.execute_activity(
         Activities::BookHotel,
         input,
         start_to_close_timeout: 5,
         retry_policy: retry_policy
       )
+      compensations << Activities::UndoBookHotel
 
       Temporalio::Workflow.logger.info("Sleeping for 1 second...")
       Temporalio::Workflow.sleep(1)
 
       # Book car
-      compensations << Activities::UndoBookCar
       car = Temporalio::Workflow.execute_activity(
         Activities::BookCar,
         input,
         start_to_close_timeout: 5,
         retry_policy: retry_policy
       )
+      compensations << Activities::UndoBookCar
 
       # Notify user
       Temporalio::Workflow.execute_activity(
