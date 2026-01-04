@@ -1,11 +1,14 @@
-from quart import Quart, render_template, request
 import uuid
+
+from quart import Quart, render_template, request
+
 from client import get_client
 from data import BookTripInput
 
 app = Quart(__name__)
 
 client = None
+
 
 @app.before_serving
 async def startup():
@@ -27,7 +30,7 @@ async def book_progress():
     hotel = form.get("hotel")
     car = form.get("car")
 
-    input = BookTripInput(
+    trip_input = BookTripInput(
         userId=user_id,
         flightId=flight,
         hotelId=hotel,
@@ -37,7 +40,7 @@ async def book_progress():
     # Start workflow without waiting for result
     await client.start_workflow(
         "BookWorkflow",
-        input,
+        trip_input,
         id=user_id,
         task_queue="trip-task-queue",
     )
