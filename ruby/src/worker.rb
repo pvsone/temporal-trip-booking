@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 require_relative 'activities'
 require_relative 'workflow'
 require 'logger'
 require 'temporalio/client'
+require 'temporalio/env_config'
 require 'temporalio/worker'
 
-client = Temporalio::Client.connect(
-  'localhost:7233',
-  'default',
-  logger: Logger.new($stdout, level: Logger::INFO)
-)
+args, kwargs = Temporalio::EnvConfig::ClientConfig.load_client_connect_options
+kwargs[:logger] = Logger.new($stdout, level: Logger::INFO)
+client = Temporalio::Client.connect(*args, **kwargs)
+puts "✅ Client connected to #{args[0]} in namespace '#{args[1]}'"
 
 worker = Temporalio::Worker.new(
   client:,
-  task_queue: "trip-task-queue",
+  task_queue: 'trip-task-queue',
   workflows: [
     TripBooking::BookWorkflow
   ],

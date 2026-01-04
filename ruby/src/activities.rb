@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'shared'
 require 'temporalio/activity'
 
@@ -11,7 +13,7 @@ module TripBooking
         if input.flightId.to_s.downcase.include?('flaky')
           # a transient error, which will be retried
           attempt = Temporalio::Activity::Context.current.info.attempt
-          raise "Flight booking service is currently unavailable" if attempt < 6
+          raise 'Flight booking service is currently unavailable' if attempt < 6
         end
 
         "Booked flight: #{input.flightId}"
@@ -26,7 +28,7 @@ module TripBooking
         if input.hotelId.to_s.downcase.include?('buggy')
           # a simulated bug
           error = true
-          raise "Error due to bug in code" if error
+          raise 'Error due to bug in code' if error
         end
 
         "Booked hotel: #{input.hotelId}"
@@ -60,7 +62,7 @@ module TripBooking
 
     class UndoBookFlight < Temporalio::Activity::Definition
       def execute(input)
-        Temporalio::Activity::Context.current.logger.info("Undo flight booking: #{input.flightId}")  
+        Temporalio::Activity::Context.current.logger.info("Undo flight booking: #{input.flightId}")
         sleep(1)
         "Unbooked flight: #{input.flightId}"
       end
