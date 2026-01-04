@@ -5,7 +5,6 @@ import com.example.tripbooking.workflows.BookWorkflowImpl;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.envconfig.ClientConfigProfile;
-import io.temporal.envconfig.LoadClientConfigProfileOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
