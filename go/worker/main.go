@@ -7,11 +7,10 @@ import (
 	"temporal-trip-booking/app"
 
 	"go.temporal.io/sdk/client"
+	"go.temporal.io/sdk/contrib/envconfig"
 	tlog "go.temporal.io/sdk/log"
 	"go.temporal.io/sdk/worker"
 )
-
-const TASK_QUEUE = "trip-task-queue"
 
 func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
@@ -19,19 +18,17 @@ func main() {
 	}))
 	slog.SetDefault(logger)
 
-	clientOptions := client.Options{
-		HostPort:  "localhost:7233",
-		Namespace: "default",
-		Logger:    tlog.NewStructuredLogger(logger),
-	}
+	clientOptions := envconfig.MustLoadDefaultClientOptions()
+	clientOptions.Logger = tlog.NewStructuredLogger(logger)
 
 	temporalClient, err := client.Dial(clientOptions)
 	if err != nil {
 		log.Fatalln("Unable to create client", err)
 	}
+	log.Printf("✅ Client connected to %v in namespace '%v'", clientOptions.HostPort, clientOptions.Namespace)
 	defer temporalClient.Close()
 
-	w := worker.New(temporalClient, TASK_QUEUE, worker.Options{})
+	w := worker.New(temporalClient, "trip-task-queue", worker.Options{})
 
 	w.RegisterWorkflow(app.BookWorkflow)
 	w.RegisterActivity(app.BookFlight)
