@@ -73,8 +73,8 @@ async def book_result(workflow_id):
     handle = client.get_workflow_handle(workflow_id)
     result = await handle.result()
 
-    if result == "Booking cancelled":
-        return await render_template("book_result.html", cancelled=True)
+    if result == "Booking canceled":
+        return await render_template("book_result.html", canceled=True)
 
     else:
         print(f"Result: {result}")
@@ -86,7 +86,7 @@ async def book_result(workflow_id):
         return await render_template(
             "book_result.html",
             result=result,
-            cancelled=False,
+            canceled=False,
             flight=flight,
             hotel=hotel,
             car=car,

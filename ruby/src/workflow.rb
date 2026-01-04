@@ -68,7 +68,7 @@ module TripBooking
           retry_policy: retry_policy
         )
       end
-      "Booking cancelled"
+      "Booking canceled"
     end
   end
 end

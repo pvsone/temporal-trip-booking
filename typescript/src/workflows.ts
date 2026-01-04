@@ -71,7 +71,7 @@ export async function BookWorkflow(input: BookTripInput): Promise<string> {
     // an error occurred so call compensations
     await compensate(compensations);
 
-    return 'Booking cancelled';
+    return 'Booking canceled';
   }
 }
 

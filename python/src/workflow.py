@@ -63,4 +63,4 @@ class BookWorkflow:
                     **activity_args,
                 )
 
-            return "Booking cancelled"
+            return "Booking canceled"

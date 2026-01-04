@@ -4,7 +4,7 @@ using Temporalio.Client;
 using Temporalio.Worker;
 
 var client = await TemporalClient.ConnectAsync(
-    new("localhost:7233") 
+    new("localhost:7233")
     {
         LoggerFactory = LoggerFactory.Create(builder =>
             builder.
@@ -29,7 +29,7 @@ using var worker = new TemporalWorker(
         .AddWorkflow<BookWorkflow>()
 );
 
-// Run worker until cancelled
+// Run worker until canceled
 Console.WriteLine("Running worker...");
 try
 {
@@ -37,5 +37,5 @@ try
 }
 catch (OperationCanceledException)
 {
-    Console.WriteLine("Worker cancelled");
+    Console.WriteLine("Worker canceled");
 }

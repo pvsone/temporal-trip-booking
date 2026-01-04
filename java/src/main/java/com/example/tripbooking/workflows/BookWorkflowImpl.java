@@ -2,7 +2,6 @@ package com.example.tripbooking.workflows;
 
 import com.example.tripbooking.activities.TripActivities;
 import com.example.tripbooking.shared.BookTripInput;
-
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
@@ -63,7 +62,7 @@ public class BookWorkflowImpl implements BookWorkflow {
         } catch (ActivityFailure af) {
             log.warn("Booking failed, compensating...", af);
             saga.compensate();
-            return "Booking cancelled";
+            return "Booking canceled";
         }
     }
 }

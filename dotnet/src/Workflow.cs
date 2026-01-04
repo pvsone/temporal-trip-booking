@@ -11,7 +11,7 @@ public class BookWorkflow
     public async Task<string> Execute(Shared input)
     {
         Workflow.Logger.LogInformation("Book workflow started, user_id = {}", input.UserId);
-        var options = new ActivityOptions() { 
+        var options = new ActivityOptions() {
             StartToCloseTimeout = TimeSpan.FromSeconds(5),
             RetryPolicy = new() {
                 InitialInterval = TimeSpan.FromSeconds(1),
@@ -19,7 +19,7 @@ public class BookWorkflow
                 BackoffCoefficient = 2
             }
         };
-        
+
         var compensations = new Stack<Func<Task>>();
 
         try
@@ -27,25 +27,25 @@ public class BookWorkflow
             // Book Flight
             var flight = await Workflow.ExecuteActivityAsync(() =>
                 TripActivities.BookFlight(input), options);
-            compensations.Push(async () => 
+            compensations.Push(async () =>
                 await Workflow.ExecuteActivityAsync(() => TripActivities.UndoBookFlight(input), options));
-            
+
             Workflow.Logger.LogInformation("Sleeping for 1 second...");
             await Workflow.DelayAsync(TimeSpan.FromSeconds(1));
 
             // Book Hotel
             var hotel = await Workflow.ExecuteActivityAsync(() =>
                 TripActivities.BookHotel(input), options);
-            compensations.Push(async () => 
+            compensations.Push(async () =>
                 await Workflow.ExecuteActivityAsync(() => TripActivities.UndoBookHotel(input), options));
-            
+
             Workflow.Logger.LogInformation("Sleeping for 1 second...");
             await Workflow.DelayAsync(TimeSpan.FromSeconds(1));
 
             // Book Car
             var car = await Workflow.ExecuteActivityAsync(() =>
                 TripActivities.BookCar(input), options);
-            compensations.Push(async () => 
+            compensations.Push(async () =>
                 await Workflow.ExecuteActivityAsync(() => TripActivities.UndoBookCar(input), options));
 
             // Notify User
@@ -69,7 +69,7 @@ public class BookWorkflow
                 }
             }
 
-            return "Booking cancelled";
+            return "Booking canceled";
         }
     }
 }

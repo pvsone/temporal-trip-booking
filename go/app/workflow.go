@@ -37,7 +37,7 @@ func BookWorkflow(ctx workflow.Context, input BookTripInput) (output string, err
 	err = workflow.ExecuteActivity(ctx, BookFlight, input.FlightId).Get(ctx, &flight)
 	if err != nil {
 		logger.Warn("Flight booking failed", "error", err)
-		return "Booking cancelled", err
+		return "Booking canceled", err
 	}
 	saga.AddCompensation(UndoBookFlight, input.FlightId)
 
@@ -50,7 +50,7 @@ func BookWorkflow(ctx workflow.Context, input BookTripInput) (output string, err
 	err = workflow.ExecuteActivity(ctx, BookHotel, input.HotelId).Get(ctx, &hotel)
 	if err != nil {
 		logger.Warn("Hotel booking failed", "error", err)
-		return "Booking cancelled", err
+		return "Booking canceled", err
 	}
 	saga.AddCompensation(UndoBookHotel, input.HotelId)
 
@@ -63,7 +63,7 @@ func BookWorkflow(ctx workflow.Context, input BookTripInput) (output string, err
 	err = workflow.ExecuteActivity(ctx, BookCar, input.CarId).Get(ctx, &car)
 	if err != nil {
 		logger.Warn("Car booking failed", "error", err)
-		return "Booking cancelled", err
+		return "Booking canceled", err
 	}
 	saga.AddCompensation(UndoBookCar, input.CarId)
 
