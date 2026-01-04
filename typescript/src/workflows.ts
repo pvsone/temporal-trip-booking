@@ -1,4 +1,4 @@
-import { proxyActivities, ActivityFailure, ApplicationFailure, sleep, log } from '@temporalio/workflow';
+import { ActivityFailure, ApplicationFailure, log, proxyActivities, sleep } from '@temporalio/workflow';
 import type * as activities from './activities';
 import type { BookTripInput } from './shared';
 

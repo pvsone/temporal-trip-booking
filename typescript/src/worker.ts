@@ -1,14 +1,16 @@
 import { NativeConnection, Worker } from '@temporalio/worker';
+import { loadClientConnectConfig } from '@temporalio/envconfig';
 import * as activities from './activities';
 
 async function run() {
-  const connection = await NativeConnection.connect({
-    address: 'localhost:7233',
-  });
+  const config = loadClientConnectConfig();
+  const connection = await NativeConnection.connect(config.connectionOptions);
+  console.info(`✅ Client connected to ${config.connectionOptions.address} in namespace '${config.namespace}'`);
+
   try {
     const worker = await Worker.create({
       connection,
-      namespace: 'default',
+      namespace: config.namespace,
       taskQueue: 'trip-task-queue',
       workflowsPath: require.resolve('./workflows'),
       activities,
