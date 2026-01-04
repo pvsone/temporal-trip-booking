@@ -3,7 +3,7 @@ name = "temporal-trip-booking-app"
 version = "0.1.0"
 description = "A Temporal workflow for booking a trip, with compensating actions"
 authors = [
-    {name = "Peter Sullivan", email = "peter.sullivan@temporal.io"}
+    { name = "Peter Sullivan", email = "peter.sullivan@temporal.io" }
 ]
 requires-python = ">=3.12"
 dependencies = [

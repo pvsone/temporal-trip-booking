@@ -1,6 +1,7 @@
 import asyncio
 
 from temporalio.client import Client
+from temporalio.envconfig import ClientConfig
 from temporalio.worker import Worker
 
 from activities import (
@@ -16,7 +17,9 @@ from workflow import BookWorkflow
 
 
 async def main():
-    client = await Client.connect("localhost:7233")
+    connect_config = ClientConfig.load_client_connect_config()
+    client = await Client.connect(**connect_config)
+    print(f"✅ Client connected to {client.service_client.config.target_host} in namespace '{client.namespace}'")
 
     worker = Worker(
         client,
