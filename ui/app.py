@@ -1,6 +1,8 @@
+import asyncio
 import uuid
 
-from quart import Quart, render_template, request
+from quart import Quart, render_template, request, Response
+from temporalio.client import WorkflowExecutionStatus
 
 from client import get_client
 from data import BookTripInput
@@ -48,6 +50,23 @@ async def book_progress():
     return await render_template("book_progress.html", workflow_id=user_id)
 
 
+@app.route("/progress_stream/<workflow_id>")
+async def progress_stream(workflow_id):
+    async def generate():
+        handle = client.get_workflow_handle(workflow_id)
+
+        while True:
+            describe_response = await handle.describe()
+            if describe_response.status == WorkflowExecutionStatus.RUNNING:
+                yield f"data: running\n\n"
+                await asyncio.sleep(1)
+            else:
+                yield f"data: {describe_response.status.name.lower()}\n\n"
+                break
+
+    return Response(generate(), mimetype='text/event-stream')
+
+
 @app.route("/book_result/<workflow_id>")
 async def book_result(workflow_id):
     # Get workflow handle and wait for result
@@ -58,13 +77,12 @@ async def book_result(workflow_id):
         return await render_template("book_result.html", cancelled=True)
 
     else:
-        print(result)
+        print(f"Result: {result}")
         result_list = result.split("Booked ")
         flight = result_list[1].split(": ")[1].title()
         hotel = result_list[2].split(": ")[1].title()
         car = result_list[3].split(": ")[1].title()
 
-        print(workflow_id)
         return await render_template(
             "book_result.html",
             result=result,

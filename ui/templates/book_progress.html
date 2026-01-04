@@ -31,9 +31,24 @@
         }
     </style>
     <script>
-        setTimeout(function () {
-            window.location.href = '/book_result/{{ workflow_id }}';
-        }, 5000);
+        const eventSource = new EventSource('/progress_stream/{{ workflow_id }}');
+
+        eventSource.onmessage = function(event) {
+            const status = event.data;
+            if (status !== 'running') {
+                eventSource.close();
+                window.location.href = '/book_result/{{ workflow_id }}';
+            }
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('SSE error:', error);
+            eventSource.close();
+            // Fallback to direct navigation after a short delay
+            setTimeout(function () {
+                window.location.href = '/book_result/{{ workflow_id }}';
+            }, 1000);
+        };
     </script>
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
