@@ -1,16 +1,16 @@
-using TemporalTripBooking;
 using Microsoft.Extensions.Logging;
 using Temporalio.Client;
+using Temporalio.Client.EnvConfig;
 using Temporalio.Worker;
+using TemporalTripBooking;
 
-var client = await TemporalClient.ConnectAsync(
-    new("localhost:7233")
-    {
-        LoggerFactory = LoggerFactory.Create(builder =>
-            builder.
-                AddSimpleConsole(options => options.TimestampFormat = "[HH:mm:ss] ").
-                SetMinimumLevel(LogLevel.Information)),
-    });
+var connectOptions = ClientEnvConfig.LoadClientConnectOptions();
+connectOptions.LoggerFactory = LoggerFactory.Create(builder =>
+    builder.AddSimpleConsole(options => options.TimestampFormat = "[HH:mm:ss] ")
+        .SetMinimumLevel(LogLevel.Information));
+var client = await TemporalClient.ConnectAsync(connectOptions);
+Console.WriteLine("✅ Client connected to {0} in namespace '{1}'", connectOptions.TargetHost, connectOptions.Namespace);
+
 
 // Cancellation token to shutdown worker on ctrl+c
 using var tokenSource = new CancellationTokenSource();

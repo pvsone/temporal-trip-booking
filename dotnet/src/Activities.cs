@@ -1,14 +1,13 @@
 using Microsoft.Extensions.Logging;
 using Temporalio.Activities;
 using Temporalio.Exceptions;
-using Temporalio.Workflows;
 
 namespace TemporalTripBooking;
 
-public class TripActivities 
+public class TripActivities
 {
     [Activity]
-    public static async Task<string> BookFlight(Shared input)
+    public static async Task<string> BookFlight(BookTripInput input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Booking flight: {FlightId}", input.FlightId);
@@ -17,15 +16,13 @@ public class TripActivities
 
         if (input.FlightId.Contains("flaky", StringComparison.OrdinalIgnoreCase) &&
             ActivityExecutionContext.Current.Info.Attempt < 6)
-        {
             throw new Exception("Flight booking service is currently unavailable");
-        }
 
         return $"Booked flight: {input.FlightId}";
     }
 
     [Activity]
-    public static async Task<string> BookHotel(Shared input)
+    public static async Task<string> BookHotel(BookTripInput input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Booking hotel: {HotelId}", input.HotelId);
@@ -34,18 +31,15 @@ public class TripActivities
 
         if (input.HotelId.Contains("buggy", StringComparison.OrdinalIgnoreCase))
         {
-            var error = false;
-            if (error)
-            {
-                throw new Exception("Error due to bug in code");
-            }
+            var error = true;
+            if (error) throw new Exception("Error due to bug in code");
         }
 
         return $"Booked hotel: {input.HotelId}";
     }
 
     [Activity]
-    public static async Task<string> BookCar(Shared input)
+    public static async Task<string> BookCar(BookTripInput input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Booking car: {CarId}", input.CarId);
@@ -53,16 +47,14 @@ public class TripActivities
         await Task.Delay(TimeSpan.FromSeconds(1));
 
         if (input.CarId.Contains("invalid", StringComparison.OrdinalIgnoreCase))
-        {
             throw new ApplicationFailureException(
                 $"Car {input.CarId} is invalid", "InvalidCar", true);
-        }
 
         return $"Booked car: {input.CarId}";
     }
 
     [Activity]
-    public static async Task<string> NotifyUser(Shared input)
+    public static async Task<string> NotifyUser(BookTripInput input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Notifying user: {UserId}", input.UserId);
@@ -73,7 +65,7 @@ public class TripActivities
     }
 
     [Activity]
-    public static async Task<string> UndoBookFlight(Shared input)
+    public static async Task<string> UndoBookFlight(BookTripInput input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Undo flight booking: {FlightId}", input.FlightId);
@@ -84,7 +76,7 @@ public class TripActivities
     }
 
     [Activity]
-    public static async Task<string> UndoBookHotel(Shared input)
+    public static async Task<string> UndoBookHotel(BookTripInput input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Undo hotel booking: {HotelId}", input.HotelId);
@@ -95,7 +87,7 @@ public class TripActivities
     }
 
     [Activity]
-    public static async Task<string> UndoBookCar(Shared input)
+    public static async Task<string> UndoBookCar(BookTripInput input)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         logger.LogInformation("Undo car booking: {CarId}", input.CarId);

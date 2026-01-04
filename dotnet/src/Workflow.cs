@@ -8,12 +8,14 @@ namespace TemporalTripBooking;
 public class BookWorkflow
 {
     [WorkflowRun]
-    public async Task<string> Execute(Shared input)
+    public async Task<string> Execute(BookTripInput input)
     {
         Workflow.Logger.LogInformation("Book workflow started, user_id = {}", input.UserId);
-        var options = new ActivityOptions() {
+        var options = new ActivityOptions
+        {
             StartToCloseTimeout = TimeSpan.FromSeconds(5),
-            RetryPolicy = new() {
+            RetryPolicy = new RetryPolicy
+            {
                 InitialInterval = TimeSpan.FromSeconds(1),
                 MaximumInterval = TimeSpan.FromSeconds(30),
                 BackoffCoefficient = 2
@@ -58,7 +60,6 @@ public class BookWorkflow
         {
             Workflow.Logger.LogError(ex, "Failed to book trip");
             while (compensations.TryPop(out var compensation))
-            {
                 try
                 {
                     await compensation();
@@ -67,7 +68,6 @@ public class BookWorkflow
                 {
                     Workflow.Logger.LogWarning(compEx, "Compensation failed");
                 }
-            }
 
             return "Booking canceled";
         }
