@@ -4,6 +4,8 @@ import com.example.tripbooking.activities.TripActivitiesImpl;
 import com.example.tripbooking.workflows.BookWorkflowImpl;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
+import io.temporal.envconfig.ClientConfigProfile;
+import io.temporal.envconfig.LoadClientConfigProfileOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
@@ -19,28 +21,24 @@ public class BookTripWorker {
     public static void main(String[] args) {
         logger.info("Starting Temporal worker...");
 
-        // Create service stubs
-        WorkflowServiceStubs serviceStubs = WorkflowServiceStubs.newServiceStubs(
-            WorkflowServiceStubsOptions.newBuilder().setTarget("localhost:7233").build()
-        );
+        try {
+            ClientConfigProfile profile = ClientConfigProfile.load();
+            WorkflowServiceStubsOptions serviceStubsOptions = profile.toWorkflowServiceStubsOptions();
+            WorkflowClientOptions clientOptions = profile.toWorkflowClientOptions();
+            WorkflowServiceStubs serviceStubs = WorkflowServiceStubs.newServiceStubs(serviceStubsOptions);
+            WorkflowClient client = WorkflowClient.newInstance(serviceStubs, clientOptions);
+            WorkerFactory factory = WorkerFactory.newInstance(client);
 
-        // Create workflow client
-        WorkflowClient client = WorkflowClient.newInstance(
-            serviceStubs,
-            WorkflowClientOptions.newBuilder().setNamespace("default").build()
-        );
-
-        // Create worker factory
-        WorkerFactory factory = WorkerFactory.newInstance(client);
-
-        // Create worker
-        Worker worker = factory.newWorker(TASK_QUEUE);
-
-        // Register workflow and activities
-        worker.registerWorkflowImplementationTypes(BookWorkflowImpl.class);
-        worker.registerActivitiesImplementations(new TripActivitiesImpl());
-
-        // Start the worker
-        factory.start();
+            Worker worker = factory.newWorker(TASK_QUEUE);
+            worker.registerWorkflowImplementationTypes(BookWorkflowImpl.class);
+            worker.registerActivitiesImplementations(new TripActivitiesImpl());
+            factory.start();
+            logger.info("✅ Client connected to {} in namespace '{}'", 
+                serviceStubsOptions.getTarget(), clientOptions.getNamespace());
+            logger.info("Worker started and listening on task queue: {}", TASK_QUEUE);
+        } catch (Exception e) {
+            logger.error("Failed to start Temporal worker: {}", e.getMessage(), e);
+            System.exit(1);
+        }
     }
 }

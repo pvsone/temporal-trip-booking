@@ -2,8 +2,9 @@ package com.example.tripbooking.activities;
 
 import io.temporal.activity.Activity;
 import io.temporal.failure.ApplicationFailure;
-import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class TripActivitiesImpl implements TripActivities {

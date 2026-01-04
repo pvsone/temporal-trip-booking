@@ -7,25 +7,26 @@ import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
 import io.temporal.workflow.Saga;
 import io.temporal.workflow.Workflow;
-import java.time.Duration;
 import org.slf4j.Logger;
+
+import java.time.Duration;
 
 public class BookWorkflowImpl implements BookWorkflow {
 
     private static final Logger log = Workflow.getLogger(BookWorkflowImpl.class);
 
     private final TripActivities activities = Workflow.newActivityStub(
-        TripActivities.class,
-        ActivityOptions.newBuilder()
-            .setStartToCloseTimeout(Duration.ofSeconds(5))
-            .setRetryOptions(
-                RetryOptions.newBuilder()
-                    .setInitialInterval(Duration.ofSeconds(1))
-                    .setBackoffCoefficient(2.0)
-                    .setMaximumInterval(Duration.ofSeconds(30))
+            TripActivities.class,
+            ActivityOptions.newBuilder()
+                    .setStartToCloseTimeout(Duration.ofSeconds(5))
+                    .setRetryOptions(
+                            RetryOptions.newBuilder()
+                                    .setInitialInterval(Duration.ofSeconds(1))
+                                    .setBackoffCoefficient(2.0)
+                                    .setMaximumInterval(Duration.ofSeconds(30))
+                                    .build()
+                    )
                     .build()
-            )
-            .build()
     );
 
     private static void sleep(long ms) {

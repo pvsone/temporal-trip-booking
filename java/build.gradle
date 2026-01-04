@@ -21,6 +21,7 @@ ext {
 
 dependencies {
     implementation "io.temporal:temporal-sdk:$javaSDKVersion"
+    implementation "io.temporal:temporal-envconfig:$javaSDKVersion"
     implementation 'ch.qos.logback:logback-classic:1.5.22'
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
