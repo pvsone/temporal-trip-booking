@@ -18,8 +18,8 @@ async def display_form():
     return await render_template("index.html")
 
 
-@app.route("/book", methods=["POST"])
-async def book_trip():
+@app.route("/book_progress", methods=["POST"])
+async def book_progress():
     form = await request.form
     user_id = f'{form.get("name").replace(
         " ", "-").lower()}-{str(uuid.uuid4().int)[:6]}'
@@ -34,12 +34,23 @@ async def book_trip():
         carId=car,
     )
 
-    result = await client.execute_workflow(
+    # Start workflow without waiting for result
+    await client.start_workflow(
         "BookWorkflow",
         input,
         id=user_id,
         task_queue="trip-task-queue",
     )
+
+    return await render_template("book_progress.html", workflow_id=user_id)
+
+
+@app.route("/book_result/<workflow_id>")
+async def book_result(workflow_id):
+    # Get workflow handle and wait for result
+    handle = client.get_workflow_handle(workflow_id)
+    result = await handle.result()
+
     if result == "Booking cancelled":
         return await render_template("book_result.html", cancelled=True)
 
@@ -50,7 +61,7 @@ async def book_trip():
         hotel = result_list[2].split(": ")[1].title()
         car = result_list[3].split(": ")[1].title()
 
-        print(user_id)
+        print(workflow_id)
         return await render_template(
             "book_result.html",
             result=result,
@@ -58,7 +69,7 @@ async def book_trip():
             flight=flight,
             hotel=hotel,
             car=car,
-            user_id=user_id,
+            user_id=workflow_id,
         )
 
 
