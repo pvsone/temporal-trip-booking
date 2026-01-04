@@ -18,9 +18,8 @@ public class BookTripWorker {
     private static final String TASK_QUEUE = "trip-task-queue";
 
     public static void main(String[] args) {
-        logger.info("Starting Temporal worker...");
-
         try {
+            logger.info("⚙️ Using TEMPORAL_PROFILE: '{}'", System.getenv("TEMPORAL_PROFILE"));
             ClientConfigProfile profile = ClientConfigProfile.load();
             WorkflowServiceStubsOptions serviceStubsOptions = profile.toWorkflowServiceStubsOptions();
             WorkflowClientOptions clientOptions = profile.toWorkflowClientOptions();
@@ -32,9 +31,9 @@ public class BookTripWorker {
             worker.registerWorkflowImplementationTypes(BookWorkflowImpl.class);
             worker.registerActivitiesImplementations(new TripActivitiesImpl());
             factory.start();
-            logger.info("✅ Client connected to {} in namespace '{}'", 
+            logger.info("✅ Client connected to '{}' in namespace '{}'",
                 serviceStubsOptions.getTarget(), clientOptions.getNamespace());
-            logger.info("Worker started and listening on task queue: {}", TASK_QUEUE);
+            logger.info("Worker started and listening on task queue: '{}'", TASK_QUEUE);
         } catch (Exception e) {
             logger.error("Failed to start Temporal worker: {}", e.getMessage(), e);
             System.exit(1);

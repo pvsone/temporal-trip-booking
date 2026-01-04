@@ -7,10 +7,13 @@ require 'temporalio/client'
 require 'temporalio/env_config'
 require 'temporalio/worker'
 
-args, kwargs = Temporalio::EnvConfig::ClientConfig.load_client_connect_options
+puts "⚙️ Using TEMPORAL_PROFILE: '#{ENV['TEMPORAL_PROFILE']}'"
+args, kwargs = Temporalio::EnvConfig::ClientConfig.load_client_connect_options(
+  profile: ENV['TEMPORAL_PROFILE'] # TODO: remove this when sdk loads the profile env var properly
+)
 kwargs[:logger] = Logger.new($stdout, level: Logger::INFO)
 client = Temporalio::Client.connect(*args, **kwargs)
-puts "✅ Client connected to #{args[0]} in namespace '#{args[1]}'"
+puts "✅ Client connected to '#{args[0]}' in namespace '#{args[1]}'"
 
 worker = Temporalio::Worker.new(
   client:,

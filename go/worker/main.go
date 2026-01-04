@@ -18,6 +18,7 @@ func main() {
 	}))
 	slog.SetDefault(logger)
 
+	log.Printf("⚙️ Using TEMPORAL_PROFILE: '%s'", os.Getenv("TEMPORAL_PROFILE"))
 	clientOptions := envconfig.MustLoadDefaultClientOptions()
 	clientOptions.Logger = tlog.NewStructuredLogger(logger)
 
@@ -25,7 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatalln("Unable to create client", err)
 	}
-	log.Printf("✅ Client connected to %v in namespace '%v'", clientOptions.HostPort, clientOptions.Namespace)
+	log.Printf("✅ Client connected to '%v' in namespace '%v'", clientOptions.HostPort, clientOptions.Namespace)
 	defer temporalClient.Close()
 
 	w := worker.New(temporalClient, "trip-task-queue", worker.Options{})
