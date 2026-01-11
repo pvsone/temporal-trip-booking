@@ -23,12 +23,30 @@ dependencies {
     implementation "io.temporal:temporal-sdk:$javaSDKVersion"
     implementation "io.temporal:temporal-envconfig:$javaSDKVersion"
     implementation 'ch.qos.logback:logback-classic:1.5.22'
+
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    testImplementation "io.temporal:temporal-testing:$javaSDKVersion"
+    testImplementation "org.mockito:mockito-core:5.21.0"
+    testImplementation(platform("org.junit:junit-bom:5.14.2"))
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
 }
 
 application {
     mainClass = 'com.example.tripbooking.BookTripWorker'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "PASSED", "SKIPPED", "FAILED" // Display PASSED events in the console
+        1
+    }
 }
 
 //task runWorker(type: JavaExec) {

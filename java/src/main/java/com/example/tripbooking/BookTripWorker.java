@@ -32,7 +32,7 @@ public class BookTripWorker {
             worker.registerActivitiesImplementations(new TripActivitiesImpl());
             factory.start();
             logger.info("✅ Client connected to '{}' in namespace '{}'",
-                serviceStubsOptions.getTarget(), clientOptions.getNamespace());
+                    serviceStubsOptions.getTarget(), clientOptions.getNamespace());
             logger.info("Worker started and listening on task queue: '{}'", TASK_QUEUE);
         } catch (Exception e) {
             logger.error("Failed to start Temporal worker: {}", e.getMessage(), e);
