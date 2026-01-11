@@ -1,11 +1,25 @@
 # Temporal Trip Booking
 
+A demonstration of Temporal workflows implementing a trip booking system that orchestrates flight, hotel, and car reservations with automatic compensation using the Saga pattern.
+
 ## Overview
 
-The Temporal trip booking workflow is responsible for coordinating the booking of a vacation package, consisting of a
-flight, hotel, and car reservation. In the event of a failure at any point during the booking process, the workflow
-will trigger compensating actions to undo any previous bookings. This is an implementation of a Saga pattern. A Saga
-ensures that a business process is atomic, that is, it executes observably equivalent to completely or not at all.
+This project showcases how to build reliable, distributed applications using Temporal. It implements a trip booking workflow that:
+- Books a flight, hotel, and car in sequence
+- Handles failures gracefully with automatic compensation
+- Demonstrates retry strategies for transient failures
+- Uses the Saga pattern to ensure transactional consistency
+
+## Features
+
+- **Workflow Orchestration**: Coordinates multiple booking activities in a reliable, durable manner
+- **Saga Pattern**: Implements compensation logic to undo bookings if any step fails
+- **Error Handling**: Demonstrates different error types:
+  - **Transient errors** (retryable): Simulated with "flaky" flight IDs
+  - **Application errors** (non-retryable): Simulated with "invalid" car IDs
+  - **Logical bugs**: Simulated with "buggy" hotel IDs
+- **Automatic Retries**: Configurable retry policies with exponential backoff
+- **Testing**: Includes unit tests using Temporal's test framework
 
 ## Running
 
@@ -40,13 +54,17 @@ cd ui
 ```
 
 ### Run the worker
-Choose one language runtime:
 
-- Python: `cd python && ./start_worker.sh`
-- TypeScript: `cd typescript && ./start_worker.sh`
+Set the profile for the Temporal server connection
+- (Optional) `export TEMPORAL_PROFILE=default`
+
+Choose one language runtime:
+- .NET: `cd dotnet && ./start_worker.sh`
 - Go: `cd go && ./start_worker.sh`
 - Java: `cd java && ./start_worker.sh`
-- .NET: `cd dotnet && ./start_worker.sh`
+- Python: `cd python && ./start_worker.sh`
+- Ruby: `cd python && ./start_worker.sh`
+- TypeScript: `cd typescript && ./start_worker.sh`
 
 ## Demo
 
