@@ -45,7 +45,6 @@ test {
     useJUnitPlatform()
     testLogging {
         events "PASSED", "SKIPPED", "FAILED" // Display PASSED events in the console
-        1
     }
 }
 
