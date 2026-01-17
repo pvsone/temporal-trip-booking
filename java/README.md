@@ -1,33 +1,23 @@
 # Temporal Trip Booking - Java
 
 ## Prerequisites
-
 - **Java 21** or higher
 - **Gradle** (wrapper included)
 
 ## Build
-
 Build the project:
-
 ```bash
-./gradlew build
+just build
 ```
 
 ## Run
-
+Run the worker:
 ```bash
-./start_worker.sh
-```
-
-Or directly with Gradle:
-```bash
-./gradlew run
+just run
 ```
 
 ## Test
-
-Run the test suite:
-
+Run the unit tests:
 ```bash
-./gradlew test
+just test
 ```

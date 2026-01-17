@@ -1,0 +1,28 @@
+# Justfile for Temporal Trip Booking Java project
+
+# Default recipe - show available recipes
+default:
+    @just --list
+
+# Build the project
+build:
+    @echo "Building temporal-trip-booking..."
+    ./gradlew build
+
+# Run the worker
+run:
+    #!/usr/bin/env bash
+    echo "Running temporal-trip-booking worker..."
+    # TODO: remove this when the java sdk implements the default path on macOS properly
+    export TEMPORAL_CONFIG_FILE=~/Library/Application\ Support/temporalio/temporal.toml
+    ./gradlew run
+
+# Run tests
+test:
+    @echo "Running tests..."
+    ./gradlew test
+
+# Clean build artifacts
+clean:
+    @echo "Cleaning build artifacts..."
+    ./gradlew clean

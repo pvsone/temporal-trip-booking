@@ -55,8 +55,3 @@ lint:
     else \
         echo "golangci-lint not found. Install with: brew install golangci-lint"; \
     fi
-
-# Build and run
-build-run: build
-    @echo "Running built binary..."
-    ./bin/trip-booking-worker
