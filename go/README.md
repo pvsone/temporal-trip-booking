@@ -1,24 +1,16 @@
 # Temporal Trip Booking - Go
 
 ## Prerequisites
-
-- Go 1.25 or later
+- **Go 1.25** or later
 
 ## Run
-
+Run the worker:
 ```bash
-./start_worker.sh
-```
-
-Or manually:
-```bash
-go run worker/main.go
+just run
 ```
 
 ## Test
-
 Run the unit tests:
-
 ```bash
-go test ./... -v
+just test
 ```

@@ -1,0 +1,62 @@
+# Justfile for Temporal Trip Booking Go project
+
+# Default recipe - show available recipes
+default:
+    @just --list
+
+# Build the project
+build:
+    @echo "Building temporal-trip-booking..."
+    go build -o bin/trip-booking-worker ./worker/main.go
+
+# Run the worker
+run:
+    @echo "Running temporal-trip-booking worker..."
+    go run worker/main.go
+
+# Run tests
+test:
+    @echo "Running tests..."
+    go test ./... -v
+
+# Run tests with coverage
+test-coverage:
+    @echo "Running tests with coverage..."
+    go test ./... -v -coverprofile=coverage.out
+    go tool cover -html=coverage.out -o coverage.html
+    @echo "Coverage report generated: coverage.html"
+
+# Clean build artifacts
+clean:
+    @echo "Cleaning build artifacts..."
+    rm -rf bin/
+    rm -f coverage.out coverage.html
+
+# Download dependencies
+deps:
+    @echo "Downloading dependencies..."
+    go mod download
+
+# Tidy dependencies
+tidy:
+    @echo "Tidying dependencies..."
+    go mod tidy
+
+# Format code
+fmt:
+    @echo "Formatting code..."
+    go fmt ./...
+
+# Run linter (requires golangci-lint)
+lint:
+    @echo "Running linter..."
+    @if command -v golangci-lint > /dev/null; then \
+        golangci-lint run; \
+    else \
+        echo "golangci-lint not found. Install with: brew install golangci-lint"; \
+    fi
+
+# Build and run
+build-run: build
+    @echo "Running built binary..."
+    ./bin/trip-booking-worker
