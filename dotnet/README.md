@@ -1,7 +1,13 @@
-# Temporal Trip Booking - Go
+# Temporal Trip Booking - .NET
 
 ## Prerequisites
-- **Go 1.25** or later
+- **.NET 9.0** or later
+
+## Build
+Build the project:
+```bash
+just build
+```
 
 ## Run
 Run the worker:

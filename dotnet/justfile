@@ -1,4 +1,4 @@
-# Justfile for Temporal Trip Booking Go project
+# Justfile for Temporal Trip Booking .NET project
 
 # Default recipe - show available recipes
 default:
@@ -7,28 +7,23 @@ default:
 # Build the project
 build:
     @echo "Building temporal-trip-booking..."
-    go build -o bin/trip-booking-worker ./worker/main.go
+    dotnet build
 
 # Run the worker
 run:
     @echo "Running temporal-trip-booking worker..."
-    go run worker/main.go
+    dotnet run --project src/TripBooking.csproj
 
 # Run tests
 test:
     @echo "Running tests..."
-    go test ./... -v
+    dotnet test
 
 # Clean build artifacts
 clean:
     @echo "Cleaning build artifacts..."
-    rm -rf bin/
-    rm -f coverage.out coverage.html
+    dotnet clean
 
-# Download dependencies
-deps:
-    go mod download
-
-# Tidy dependencies
-tidy:
-    go mod tidy
+# Restore dependencies
+restore:
+    dotnet restore

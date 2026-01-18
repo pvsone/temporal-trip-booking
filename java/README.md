@@ -1,7 +1,7 @@
 # Temporal Trip Booking - Java
 
 ## Prerequisites
-- **Java 21** or higher
+- **Java 21** or later
 - **Gradle** (wrapper included)
 
 ## Build
@@ -17,7 +17,7 @@ just run
 ```
 
 ## Test
-Run the unit tests:
+Run the tests:
 ```bash
 just test
 ```

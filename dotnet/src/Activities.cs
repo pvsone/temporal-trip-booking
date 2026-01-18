@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 using Temporalio.Activities;
 using Temporalio.Exceptions;
 
-namespace TemporalTripBooking;
+namespace TripBooking;
 
 public class TripActivities
 {

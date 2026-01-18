@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace TemporalTripBooking;
+namespace TripBooking;
 
 public class BookTripInput
 {
@@ -20,11 +20,11 @@ public class BookTripInput
         CarId = carId;
     }
 
-    [JsonPropertyName("userId")] public string UserId { get; set;  }
+    [JsonPropertyName("userId")] public string UserId { get; set; }
 
-    [JsonPropertyName("flightId")] public string FlightId { get; set;  }
+    [JsonPropertyName("flightId")] public string FlightId { get; set; }
 
     [JsonPropertyName("hotelId")] public string HotelId { get; set; }
 
-    [JsonPropertyName("carId")] public string CarId { get; set;  }
+    [JsonPropertyName("carId")] public string CarId { get; set; }
 }

@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 using Temporalio.Common;
 using Temporalio.Workflows;
 
-namespace TemporalTripBooking;
+namespace TripBooking;
 
 [Workflow("BookWorkflow")]
 public class BookWorkflow
