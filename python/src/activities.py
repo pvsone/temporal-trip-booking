@@ -4,7 +4,7 @@ import logging
 from temporalio import activity
 from temporalio.exceptions import ApplicationError
 
-from shared import BookTripInput
+from .shared import BookTripInput
 
 logging.basicConfig(level=logging.INFO)
 

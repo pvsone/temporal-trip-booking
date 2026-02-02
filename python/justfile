@@ -1,0 +1,30 @@
+# Justfile for Temporal Trip Booking Python project
+
+# Default recipe - show available recipes
+default:
+    @just --list
+
+# Install dependencies
+install:
+    @echo "Installing dependencies..."
+    uv sync
+
+# Run the worker
+run:
+    @echo "Running temporal-trip-booking worker..."
+    uv sync
+    uv run python src/worker.py
+
+# Run tests
+test:
+    @echo "Running tests..."
+    uv sync --extra test
+    uv run pytest tests/ -v
+
+# Clean build artifacts and cache
+clean:
+    @echo "Cleaning build artifacts..."
+    rm -rf .pytest_cache
+    rm -rf __pycache__
+    find . -type d -name "__pycache__" -exec rm -rf {} +
+    find . -type f -name "*.pyc" -delete
